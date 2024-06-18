@@ -8,7 +8,6 @@ editor: visual
 
 ```{r}
 library("gitcreds")
-gitcreds_set()
 library("readr")
 library("dplyr")
 library("sf")
