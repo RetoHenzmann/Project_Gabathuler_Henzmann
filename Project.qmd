@@ -482,62 +482,76 @@ vdata_geo_join1 <- vdata_wide %>%
 ### Confusion Matrix
 
 ```{r}
+# Convert columns in data_geo_join1 to factors
+data_geo_join1$transport_mode <- as.factor(data_geo_join1$transport_mode)
+data_geo_join1$travel_mode_det <- as.factor(data_geo_join1$travel_mode_det)
 
-# Convert to factors and get to thes same levels
-data_geo_join2$transport_mode <- factor(data_geo_join1$transport_mode)
-data_geo_join2$travel_mode_det <- factor(data_geo_join1$travel_mode_det)
+# Combine levels from both factors
+all_levels <- union(levels(data_geo_join1$transport_mode), levels(data_geo_join1$travel_mode_det))
 
-all_levels <- union(levels(data_geo_join2$transport_mode), levels(data_geo_join2$travel_mode_det))
+# Set the same levels for both factors in data_geo_join2
+data_geo_join1$transport_mode <- factor(data_geo_join1$transport_mode, levels = all_levels)
+data_geo_join1$travel_mode_det <- factor(data_geo_join1$travel_mode_det, levels = all_levels)
 
-data_geo_join2$transport_mode <- factor(data_geo_join2$transport_mode, levels = all_levels)
-data_geo_join2$travel_mode_det <- factor(data_geo_join2$travel_mode_det, levels  = all_levels)
-
-vdata_geo_join2$transport_mode <- factor(vdata_geo_join1$transport_mode)
-vdata_geo_join2$travel_mode_det <- factor(vdata_geo_join1$travel_mode_det)
-
-all_levelsv <- union(levels(vdata_geo_join2$transport_mode), levels(vdata_geo_join2$travel_mode_det))
-vdata_geo_join2$transport_mode <- factor(vdata_geo_join2$transport_mode, levels = all_levelsv)
-vdata_geo_join2$travel_mode_det <- factor(vdata_geo_join2$travel_mode_det, levels  = all_levelsv)
-
-
-#Confsionmatrix for cal and train data generat
 con_train <- confusionMatrix(data_geo_join1$transport_mode, data_geo_join1$travel_mode_det)
-
-
-con_val <- confusionMatrix(vdata_geo_join2$transport_mode, vdata_geo_join2$travel_mode_det)
-
-
-#Visualise Confusionmatrix
 
 # Extract the confusion matrix table
 conf_matrix_table <- as.table(con_train$table)
 
+# Add row and column sums to the table
+conf_matrix_table <- addmargins(conf_matrix_table)
+
 # Melt the table to long format for ggplot2
 conf_matrix_melt <- melt(conf_matrix_table)
 
+
+# Identify rows and columns with sums
+conf_matrix_melt$is_sum <- with(conf_matrix_melt, Reference == rownames(conf_matrix_table)[nrow(conf_matrix_table)] | Prediction == colnames(conf_matrix_table)[ncol(conf_matrix_table)])
+
 # Plot the confusion matrix using ggplot2
-ggplot(data = conf_matrix_melt, aes(x = Reference, y = Prediction, fill = value)) +
-    geom_tile(color = "white") +
-    scale_fill_gradient(low = "white", high = "blue") +
-    geom_text(aes(label = sprintf("%d", value)), vjust = 1) +
-    theme_minimal() +
-    labs(title = "Confusion Matrix", x = "Actual", y="Predicted")
+ggplot(data = conf_matrix_melt, aes(x = Reference, y = Prediction, fill = ifelse(is_sum, NA, value))) +
+  geom_tile(color = "white") +
+  scale_fill_gradient(low = "white", high = "blue", na.value = "grey90") +
+  geom_text(aes(label = sprintf("%d", value)), vjust = 1) +
+  theme_minimal() +
+  labs(title = "Confusion Matrix Traingsdata", x = "Actual", y = "Predicted") +
+  guides(fill = guide_legend(title = "Count"))
+
+####Validation data
+# Convert columns in vdata_geo_join1 to factors
+vdata_geo_join1$transport_mode <- as.factor(vdata_geo_join1$transport_mode)
+vdata_geo_join1$travel_mode_det <- as.factor(vdata_geo_join1$travel_mode_det)
+
+# Combine levels from both factors
+all_levelsv <- union(levels(vdata_geo_join1$transport_mode), levels(vdata_geo_join1$travel_mode_det))
+
+# Set the same levels for both factors in data_geo_join2
+vdata_geo_join1$transport_mode <- factor(vdata_geo_join1$transport_mode, levels = all_levelsv)
+vdata_geo_join1$travel_mode_det <- factor(vdata_geo_join1$travel_mode_det, levels = all_levelsv)
+
+con_val <- confusionMatrix(vdata_geo_join1$transport_mode, vdata_geo_join1$travel_mode_det)
 
 # Extract the confusion matrix table
-conf_val <- as.table(con_val$table)
+conf_matrix_val <- as.table(con_val$table)
+
+# Add row and column sums to the table
+conf_matrix_val <- addmargins(conf_matrix_val)
 
 # Melt the table to long format for ggplot2
-conf_val <- melt(conf_val)
+conf_matrix_val_melt <- melt(conf_matrix_val)
+
+
+# Identify rows and columns with sums
+conf_matrix_val_melt$is_sum <- with(conf_matrix_val_melt, Reference == rownames(conf_matrix_val)[nrow(conf_matrix_val)] | Prediction == colnames(conf_matrix_val)[ncol(conf_matrix_val)])
 
 # Plot the confusion matrix using ggplot2
-ggplot(data = conf_val, aes(x = Reference, y = Prediction, fill = value)) +
-    geom_tile(color = "white") +
-    scale_fill_gradient(low = "white", high = "blue") +
-    geom_text(aes(label = sprintf("%d", value)), vjust = 1) +
-    theme_minimal() +
-    labs(title = "Confusion Matrix", x = "Actual", y="Predicted")
-
-
+ggplot(data = conf_matrix_val_melt, aes(x = Reference, y = Prediction, fill = ifelse(is_sum, NA, value))) +
+  geom_tile(color = "white") +
+  scale_fill_gradient(low = "white", high = "blue", na.value = "grey90") +
+  geom_text(aes(label = sprintf("%d", value)), vjust = 1) +
+  theme_minimal() +
+  labs(title = "Confusion Matrix Validationdata", x = "Actual", y = "Predicted") +
+  guides(fill = guide_legend(title = "Count")) 
 ```
 
 ### Analysis
