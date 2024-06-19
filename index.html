@@ -113,16 +113,64 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Rule-based methods, while potentially less accurate overall, offer the precision of distinguishing up to 12 transport modes by incorporating additional GIS layers (Sadeghian et al., 2021). These methods rely on prior understanding and manually defined rules, making them more time-consuming and less transferable but beneficial in contexts where detailed mode differentiation is necessary (Sadeghian et al., 2021; Nitsche et al., 2014). The choice between machine learning and rule-based methods ultimately depends on the study’s specific objectives and the required balance between accuracy, precision, and applicability.</p>
 <p>Handheld mobile devices collecting GPS data facilitate straightforward collection of travel traces from various modes of transport, such as walking, cycling, and driving. These data can enhance existing road maps and support location-based services (Schroedl et al., 2004; Zhang et al., 2010). However, accurately identifying travel modes from GPS traces poses challenges due to similarities in travel characteristics across different modes and potential errors.</p>
 <p>Given POSMO’s practical applications, our primary goal is to determine different travel modes as accurately as possible using GPS data and road maps. Therefore, we aim to implement a rule-based data science approach in R to identify travel modes using mobile GPS data. We will evaluate all travel modes present in our training data, including walking, biking, car, bus, and train, to address the following research question:</p>
-<p>To what extent can the mode of transportation be accurately determined using GPS data, in conjunction with road maps and public transport route maps?</p>
+<ul>
+<li>To what extent can the mode of transportation be accurately determined using GPS data, in conjunction with road maps and public transport route maps?</li>
+</ul>
 </section>
 <section id="material-and-methods" class="level2">
 <h2 class="anchored" data-anchor-id="material-and-methods">Material and Methods</h2>
+<section id="datasets-and-models" class="level3">
+<h3 class="anchored" data-anchor-id="datasets-and-models">Datasets and Models</h3>
+<section id="data-collection" class="level4">
+<h4 class="anchored" data-anchor-id="data-collection">Data Collection</h4>
+<p>To develop our travel mode detection method, we collected movement data from a team member using the POSMO app (Genossenschaft Posmo, 2024) over a span of 21 days (from April 5, 2024, to April 26, 2024). During this timeframe, 12’404 data points were recorded, with a sampling rate set at ? seconds. For the next steps in our method, we focused on the following attributes:</p>
+<ul>
+<li>Datetime: Timestamp of each recorded data point</li>
+<li>Geometry: X- and Y-Coordinates in the CH1903+ LV95 coordinate system</li>
+</ul>
+</section>
+<section id="supplementary-data" class="level4">
+<h4 class="anchored" data-anchor-id="supplementary-data">Supplementary Data</h4>
+<p>In addition to the primary data collected with the POSMO app, we incorporated the swissTLM3D dataset provided by swisstopo (2024). The feature classes and attributes extracted from this dataset include:</p>
+<ul>
+<li>TLM_STRASSE (OBJEKTART, geometry)</li>
+<li>TLM_EISENBAHN (VERKEHRSMITTEL, geometry)</li>
+<li>TLM_HALTESTELLE (OBJEKTART, geometry)</li>
+</ul>
+<p>A second POSMO-dataset provided by the same team member was used for validation. These data were collected over a period of X days (11.04-16.06.2023) with a sampling rate of 10s, resulting in a total of X fixes. It was eventually corrected and validated for travel mode in POSMO and the same attributes were further analyzed. Data preprocessing &amp; Conceptual Model For preprocessing, analysis, and visualization, we employed R (v. 4.2.3; R Core Team, 2023) and the ggplot2 package (v. 3.4.2; Wickham, 2016). Following the approach outlined by Laube (2014), we conceptualized the movement space as a continuous, 2D, and entity-based model. All datasets were structured as vector data, representing the movement as a series of unconstrained, intermittent, and time-stamped fixes. The movement data were collected using a Lagrangian perspective, which involves tracking the individual movements over time.</p>
+</section>
+<section id="segmentation-and-filter" class="level4">
+<h4 class="anchored" data-anchor-id="segmentation-and-filter">Segmentation and Filter</h4>
+<p>According to Wu et al.&nbsp;(2016), to be able to assign transport modes to trajectories, we need to first divide our raw data into segments, that represent individual movements first. As an initial step, we calculated the distances for each point within a specified temporal window v (v=??). Wann und wie wird unique segment ID gemacht ? Then, Static points were identified by calculating for each position the average distance to the points before and after it. These distances were then summarized to an average value. Points whose stepMean was below the overall average were marked as static. Finally, these static points were filtered from the dataset. Next, short segments with a length less than 600m were removed as well, because ?</p>
+</section>
+<section id="calculating-movement-variables" class="level4">
+<h4 class="anchored" data-anchor-id="calculating-movement-variables">Calculating Movement Variables</h4>
+<p>To be able to detect our transport modes, we had to calculate some additional variables. Sadhegian et al.&nbsp;(2011) suggested that average speed, maximum speed and acceleration are the most common and important ones to do so. We computed speed according to Laube &amp; Purves (2011) using three fixes located inside a temporal window w, which was set to ?? seconds. The acceleration was calculated based on the same principle and defined as the change in speed over the change in time. Then, the minimum, maximum, and average values for the two parameters were calculated for each segment. Additionally, each segment was assigned to the modified travel mode from POSMO. The different features of the two parameters were visualized based on their transportation mode for exploratory data analysis.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="Segmentation.png" class="img-fluid figure-img"></p>
+<p><img src="transport_mode_boxplot.png" class="img-fluid figure-img"></p>
 <figcaption>Segmentation</figcaption>
 </figure>
 </div>
+<p>It is noticeable that most means of transportation show similar patterns or at least considerable similarities. Only the trajectories of trains differ significantly from the other modes of transportation in terms of speed and acceleration. Therefore, we decided to first embed the trajectories in their geographical context in order to improve the classification of the means of transportation.</p>
+</section>
+<section id="geographical-context" class="level4">
+<h4 class="anchored" data-anchor-id="geographical-context">Geographical Context</h4>
+<p>According to Gschwend (2015), movement patterns are usually quantified by geometric properties and the arrangement of fixed points, often ignoring the geographical environment that could provide valuable semantic insights. Therefore, incorporating external information can significantly improve the efficiency of algorithms (Sadeghian et al., 2021). As described in Section 2.1, we used different feature classes from the swissTLM3D dataset and merged all roads and railroads into a background layer. We then performed a spatial join by assigning each fixed point of the POSMO data to the closest feature, as shown in Figure ? for an example day. Finally, each segment was assigned the feature that corresponded to the most fixed points within that segment.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="USED_transport_Infrasturcutre_onde%20day.png" class="img-fluid figure-img"></p>
+<figcaption>Segmentation</figcaption>
+</figure>
+</div>
+<p>In addition, the swissTLM3D feature class TLM_HALTESTELLE, which includes stops for buses, trains and ships, was used to create a 75-meter buffer around each stop. A spatial join was created for fixes within these buffer zones. It was then recorded for each segment whether the first and last points were within a stop buffer in order to use this information for further analysis. Transport Mode Detection</p>
+<p>The next step was to use the geographical context information for a classification into the transport modes. In that way, the trajectories were classified as follows: trains (closest to train tracks), trams (closest to tram tracks), and buses (first and last stops within a bus or train stop buffer). This was done step by step, so that trajectories classified once were not able to be classified again. In order to assign the other trajectories, we used the visualization of the movement parameters (Bild mit Boxplot oder?) to estimate what thresholds should be applied. In that way, we decided to classify the mode of transportation as car if he maximum speed was greater than 20 km/h or the maximum acceleration was greater than 0.3 m/s² and if the average speed was over 2 km/h or the maximum speed was over 5 km/h, the mode of transport was classified as bike.</p>
+</section>
+<section id="validation" class="level4">
+<h4 class="anchored" data-anchor-id="validation">Validation</h4>
+<p>The next step was to compare the result of our transport mode detection with the POSMO classification and create a confusion matrix. However, since our method originally consists of this data, this cannot be counted as a proper validation. In order to properly test our method, a second data set from POSMO, which was recorded over a period of X days, was subjected to the same methodology as our training data set, except that we have manually checked the transportation modes specified by POSMO in this dataset and corrected them if necessary. The results of this second transport mode detection were then used to create another confusion matrix.</p>
+</section>
+</section>
 </section>
 <section id="results" class="level2">
 <h2 class="anchored" data-anchor-id="results">Results</h2>
