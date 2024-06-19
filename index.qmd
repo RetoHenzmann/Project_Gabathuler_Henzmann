@@ -1,6 +1,6 @@
 ---
-title: GPS-based traffic mode detection: Implementation and validation
-subtitle: Analyzing Transport Modes through GPS Data and Road Maps: A Comparative Study with Posmo
+title: GPS-based traffic mode detection Implementation and validation
+subtitle: Analyzing Transport Modes through GPS Data and Road Maps A Comparative Study with Posmo
 author: Reto Henzmann and Oswald Gabathuler
 format:
   html:
@@ -25,7 +25,7 @@ bibliography: bibliography.bib
 @laube2011 investigate how temporal scale affects the calculation of movement parameters (speed, sinuosity and turning angle) of animal trajectories. 
 
 ## Material and Methods
-
+![Segmentation](Segmentation.png)
 ## Results
 
 ## Discussion

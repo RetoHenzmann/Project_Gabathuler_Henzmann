@@ -9,6 +9,7 @@ library("tmap")
 library("ConfusionTableR")
 library("caret")
 library("reshape2")
+install.packages("rmarkdown")
 
 #Import training dataset
 data <- read_delim("Posmo_Movement_data.csv")
@@ -46,7 +47,7 @@ railway <- st_read("swisstlm3d_2024-03_2056_5728.shp/TLM_OEV/swissTLM3D_TLM_EISE
 #Segmentation and filter
 
 # Plot the movement data with datetime as the color scale
-ggplot(data_modif, aes(X,Y, color =datetime))+
+movment_datamodif <-  ggplot(data_modif, aes(X,Y, color =datetime))+
   geom_point()+
   geom_path()+
   coord_fixed()+
