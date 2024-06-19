@@ -1,7 +1,11 @@
 ---
 title: GPS-based traffic mode detection Implementation and validation
 subtitle: Analyzing Transport Modes through GPS Data and Road Maps A Comparative Study with Posmo
+<<<<<<< HEAD
 author: Reto Henzmann and 
+=======
+author: Reto Henzmann and Oswald Gabathule
+
 format:
   html:
     code-fold: true
@@ -34,6 +38,9 @@ To what extent can the mode of transportation be accurately determined using GPS
 
 ## Material and Methods
 ![Segmentation](Segmentation.png)
+<<<<<<< HEAD
+
+=======
 
 ## Results
 
