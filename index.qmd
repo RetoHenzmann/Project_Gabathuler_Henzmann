@@ -8,7 +8,7 @@ format:
 execute:
   warning: false
   message: false
-lang: en  # switch to "de" if you write your report in german
+lang: en
 bibliography: bibliography.bib
 ---
 
