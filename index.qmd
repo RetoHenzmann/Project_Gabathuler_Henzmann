@@ -1,20 +1,17 @@
 ---
 title: GPS-based traffic mode detection Implementation and validation
 subtitle: Analyzing Transport Modes through GPS Data and Road Maps A Comparative Study with Posmo
-<<<<<<< HEAD
-author: Reto Henzmann and 
-=======
-author: Reto Henzmann and Oswald Gabathule
-
+author: Reto Henzmann and Gabathuler Oswald
 format:
   html:
     code-fold: true
 execute:
   warning: false
   message: false
-lang: en
+lang: en  # switch to "de" if you write your report in german
 bibliography: bibliography.bib
 ---
+
 
 ```{r preprocessing}
 #| code-summary: preprocessing
@@ -25,7 +22,6 @@ bibliography: bibliography.bib
 ## Abstract
 
 ## Introduction
-
 Travel mode detection, particularly using GPS data, is crucial for effective transportation planning and optimization. It lays the groundwork for strategies aimed at reducing traffic congestion and pollution (Nitsche et al., 2014). Traditionally, travel information was collected through household surveys and telephone interviews (Stopher and Greaves, 2007; Gadziński, 2018; Dabiri et al., 2019). However, these methods are often inaccurate, time-consuming, and expensive (Stopher and Greaves, 2007; Li et al., 2018; Gadziński, 2018). The advent of smartphones with GPS capabilities has revolutionized data collection, allowing for extensive and detailed gathering of spatial and temporal data (Wu et al., 2016). While GPS data provides comprehensive geometric and temporal information, further processing is necessary to extract additional attributes such as travel mode (Zhang et al., 2012; Sadeghian et al., 2021). Detecting travel modes using GPS data has attracted considerable research interest, with various methods offering different advantages and limitations. Machine learning algorithms, particularly unsupervised and deep learning approaches, are increasingly utilized due to their ability to handle large datasets and achieve accurate clustering (Li et al., 2020; Markos & Yu, 2020; Yu, 2021; Sadeghian et al., 2021). However, these methods often categorize only a limited number of modes and may not always integrate additional GIS layers, which can be achieved through rule-based methods (Sadeghian et al., 2021; Wu et al., 2016). 
 
 Rule-based methods, while potentially less accurate overall, offer the precision of distinguishing up to 12 transport modes by incorporating additional GIS layers (Sadeghian et al., 2021). These methods rely on prior understanding and manually defined rules, making them more time-consuming and less transferable but beneficial in contexts where detailed mode differentiation is necessary (Sadeghian et al., 2021; Nitsche et al., 2014). The choice between machine learning and rule-based methods ultimately depends on the study's specific objectives and the required balance between accuracy, precision, and applicability. 
@@ -37,10 +33,8 @@ Given POSMO's practical applications, our primary goal is to determine different
 To what extent can the mode of transportation be accurately determined using GPS data, in conjunction with road maps and public transport route maps? 
 
 ## Material and Methods
-![Segmentation](Segmentation.png)
-<<<<<<< HEAD
 
-=======
+![Segmentation](Segmentation.png)
 
 ## Results
 
@@ -56,5 +50,4 @@ To what extent can the mode of transportation be accurately determined using GPS
 #| eval: false
 wordcountaddin::word_count("index.qmd")
 ```
-
 
