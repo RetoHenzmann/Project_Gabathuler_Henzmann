@@ -142,6 +142,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="segmentation-and-filter" class="level4">
 <h4 class="anchored" data-anchor-id="segmentation-and-filter">Segmentation and Filter</h4>
 <p>According to Wu et al.&nbsp;(2016), to be able to assign transport modes to trajectories, we need to first divide our raw data into segments, that represent individual movements first. As an initial step, we calculated the distances for each point within a specified temporal window v (v=??). Wann und wie wird unique segment ID gemacht ? Then, Static points were identified by calculating for each position the average distance to the points before and after it. These distances were then summarized to an average value. Points whose stepMean was below the overall average were marked as static. Finally, these static points were filtered from the dataset. Next, short segments with a length less than 600m were removed as well, because ?</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="Segmentation.png" class="img-fluid figure-img"></p>
+<figcaption>Figure 1: Shows the segmentation of the trajectory without removing the static segments and the short segments</figcaption>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="Statische%20Segmente%20Punkte%20entfernen.png" class="img-fluid figure-img"></p>
+<figcaption>Figure 2: Shows the segmentation of the trajectory with removal of the static segments and the short segments.</figcaption>
+</figure>
+</div>
 </section>
 <section id="calculating-movement-variables" class="level4">
 <h4 class="anchored" data-anchor-id="calculating-movement-variables">Calculating Movement Variables</h4>
@@ -149,7 +161,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="transport_mode_boxplot.png" class="img-fluid figure-img"></p>
-<figcaption>Segmentation</figcaption>
+<figcaption>Figure 3: Boxplot shows the distribution of speed and acceleration of the means of transport used. These values were used to determine the means of transport.</figcaption>
 </figure>
 </div>
 <p>It is noticeable that most means of transportation show similar patterns or at least considerable similarities. Only the trajectories of trains differ significantly from the other modes of transportation in terms of speed and acceleration. Therefore, we decided to first embed the trajectories in their geographical context in order to improve the classification of the means of transportation.</p>
@@ -160,7 +172,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="USED_transport_Infrasturcutre_onde%20day.png" class="img-fluid figure-img"></p>
-<figcaption>Segmentation</figcaption>
+<figcaption>Figure: 4 The map illustrates the routes taken by pedestrians, cyclists and public transport users during the day, with the latter divided into routes served by different modes of transport.</figcaption>
 </figure>
 </div>
 <p>In addition, the swissTLM3D feature class TLM_HALTESTELLE, which includes stops for buses, trains and ships, was used to create a 75-meter buffer around each stop. A spatial join was created for fixes within these buffer zones. It was then recorded for each segment whether the first and last points were within a stop buffer in order to use this information for further analysis. Transport Mode Detection</p>
