@@ -8,7 +8,7 @@
 
 <meta name="author" content="Reto Henzmann and Gabathuler Oswald">
 
-<title>GPS-based traffic mode detection Implementation and validation</title>
+<title>GPS-based traffic mode detection : Implementation and validation</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -80,8 +80,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">GPS-based traffic mode detection Implementation and validation</h1>
-<p class="subtitle lead">Analyzing Transport Modes through GPS Data and Road Maps A Comparative Study with Posmo</p>
+<h1 class="title">GPS-based traffic mode detection : Implementation and validation</h1>
+<p class="subtitle lead">Analyzing Transport Modes through GPS Data and Road Maps : A Comparative Study with Posmo</p>
 </div>
 
 
@@ -133,7 +133,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="supplementary-data" class="level4">
 <h4 class="anchored" data-anchor-id="supplementary-data">Supplementary Data</h4>
-<p>In addition to the primary data collected with the POSMO app, we incorporated the swissTLM3D dataset provided by swisstopo (2024). The feature classes and attributes extracted from this dataset include: - TLM_STRASSE (OBJEKTART, geometry) - TLM_EISENBAHN (VERKEHRSMITTEL, geometry) - TLM_HALTESTELLE (OBJEKTART, geometry)</p>
+<p>In addition to the primary data collected with the POSMO app, we incorporated the swissTLM3D dataset provided by swisstopo (2024). The feature classes and attributes extracted from this dataset include:</p>
+<ul>
+<li>TLM_STRASSE (OBJEKTART, geometry)</li>
+<li>TLM_EISENBAHN (VERKEHRSMITTEL, geometry)</li>
+<li>TLM_HALTESTELLE (OBJEKTART, geometry)</li>
+</ul>
 <p>A second POSMO-dataset provided by the same team member was used for validation. These data were collected over a period of 11days with a sampling rate of 15s, resulting in a total of 2567 fixes. It was eventually corrected and validated for travel mode in POSMO and the same attributes were further analyzed.</p>
 </section>
 <section id="data-preprocessing-conceptual-model" class="level4">
@@ -144,7 +149,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="segmentation-and-filter" class="level3">
 <h3 class="anchored" data-anchor-id="segmentation-and-filter">Segmentation and Filter</h3>
-<p>According to Wu et al.&nbsp;(2016), to be able to assign transport modes to trajectories, we need to first divide our raw data into segments, that represent individual movements first (Figure 1). As an initial step, we calculated the distances for each point within a specified temporal window of v = 50 second (4 Ticks ).</p>
+<p>According to Wu et al.&nbsp;(2016), to be able to assign transport modes to trajectories, we need to first divide our raw data into segments, that represent individual movements first (Figure 1). As an initial step, we calculated the distances for each point within a specified temporal window of v = 50 seconds (4 Ticks).</p>
 <p>Then, Static points were identified by calculating for each position the average distance to the points before and after it. These distances were then summarized to an average value. Points whose stepMean was below the overall average were marked as static. Finally, these static points were filtered from the dataset. Next, the segments whose total stepMean value is not greater than the 25th percentile of all stepMean values were then removed (Figure 2).</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -173,7 +178,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="geographical-context" class="level3">
 <h3 class="anchored" data-anchor-id="geographical-context">Geographical Context</h3>
-<p>According to Gschwend (2015), movement patterns are usually quantified by geometric properties and the arrangement of fixed points, often ignoring the geographical environment that could provide valuable semantic insights. Therefore, incorporating external information can significantly improve the efficiency of algorithms (Sadeghian et al., 2021). As described in Section 2.1, we used different feature classes from the swissTLM3D dataset and merged all roads and railroads into a background layer. We then performed a spatial join by assigning each fixed point of the POSMO data to the closest feature, as shown in Figure 4 for an example day. Finally, each segment was assigned the feature that corresponded to the most fixed points within that segment.</p>
+<p>According to Gschwend (2015), movement patterns are usually quantified by geometric properties and the arrangement of fixed points, often ignoring the geographical environment that could provide valuable semantic insights. Therefore, incorporating external information can significantly improve the efficiency of algorithms (Sadeghian et al., 2021). As described in the chapter Datasets and Models, we used different feature classes from the swissTLM3D dataset and merged all roads and railroads into a background layer. We then performed a spatial join by assigning each fixed point of the POSMO data to the closest feature, as shown in Figure 4 for an example day. Finally, each segment was assigned the feature that corresponded to the most fixed points within that segment.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="USED_transport_Infrasturcutre_onde%20day.png" class="img-fluid figure-img"></p>
@@ -242,8 +247,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>wordcountaddin<span class="sc">::</span><span class="fu">word_count</span>(<span class="st">"index.qmd"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"pacman"</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">p_install_gh</span>(<span class="st">"benmarwick/wordcountaddin"</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>wordcountaddin<span class="sc">::</span><span class="fu">word_count</span>(<span class="st">"index.qmd"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2665</code></pre>
+</div>
 </div>
 </section>
 </section>
