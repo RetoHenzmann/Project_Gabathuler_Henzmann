@@ -67,11 +67,11 @@ Then, Static points were identified by calculating for each position the average
 
 
 
-![Figure 1: Shows the segmentation of the trajectory without removing the static segments and the short segments](Bilder/Segmentation.png) 
+![Figure 1: Shows the segmentation of the trajectory without removing the static segments and the short segments](Bilder//Segmentation.png) 
 
 
 
-![Figure 2: Shows the segmentation of the trajectory with removal of the static segments and the short segments.](Bilder/Statische Segmente Punkte entfernen.png)
+![Figure 2: Shows the segmentation of the trajectory with removal of the static segments and the short segments.](Bilder//Statische Segmente Punkte entfernen.png)
 
 
 
@@ -84,7 +84,7 @@ Then, the minimum, maximum, and average values for the two parameters were calcu
 
 
 
-![Figure 3: Boxplot shows the distribution of speed and acceleration of the means of transport used. These values were used to determine the means of transport.](Bilder/transport_mode_boxplot.png)
+![Figure 3: Boxplot shows the distribution of speed and acceleration of the means of transport used. These values were used to determine the means of transport.](Bilder//transport_mode_boxplot.png)
 
 
 It is noticeable that most means of transportation show similar patterns or at least considerable similarities. Only the trajectories of trains differ significantly from the other modes of transportation in terms of speed and acceleration. Therefore, we decided to first embed the trajectories in their geographical context in order to improve the classification of the means of transportation.
@@ -93,7 +93,7 @@ It is noticeable that most means of transportation show similar patterns or at l
 
 According to Gschwend (2015), movement patterns are usually quantified by geometric properties and the arrangement of fixed points, often ignoring the geographical environment that could provide valuable semantic insights. Therefore, incorporating external information can significantly improve the efficiency of algorithms (Sadeghian et al., 2021). As described in the chapter Datasets and Models, we used different feature classes from the swissTLM3D dataset and merged all roads and railroads into a background layer. We then performed a spatial join by assigning each fixed point of the POSMO data to the closest feature, as shown in Figure 4 for an example day. Finally, each segment was assigned the feature that corresponded to the most fixed points within that segment. 
 
-![Figure 4: The map illustrates the routes taken by pedestrians, cyclists and public transport users during the day, with the latter divided into routes served by different modes of transport.](Bilder/USED_transport_Infrasturcutre_onde day.png)
+![Figure 4: The map illustrates the routes taken by pedestrians, cyclists and public transport users during the day, with the latter divided into routes served by different modes of transport.](Bilder//USED_transport_Infrasturcutre_onde day.png)
 
 In addition, the swissTLM3D feature class TLM_HALTESTELLE, which includes stops for buses, trains and ships, was used to create a 75-meter buffer around each stop. A spatial join was created for fixes within these buffer zones. It was then recorded for each segment whether the first and last points were within a stop buffer in order to use this information for further analysis.
 
@@ -108,12 +108,12 @@ The next step was to compare the result of our transport mode detection with the
 
 In the validation of the transportation modes in our training dataset, we achieved an accuracy of 35 % with our method (Figure 5). If we apply the same method to the validation dataset, the confusion matrix shows (Figure 6) a correct detection of 88.2%, which is significantly higher. Looking at Figure 5, it is clear that the biggest problem area in the training data is the recognition of the train (n= 20) as a means of transportation (25 % correct classification). However, in the evaluation of the validation data, train is the mode of transport that was best recognized (100% correct classification). Apart from cars (78.2%), the other modes of transport were also recognized very well.
 
-![Figure 5: The confusion matrix of the training data, which compares the "Predicted" means of transport calculated by our model with the "Actual" from Posmo.](Bilder/Train_confmatrix.png)
+![Figure 5: The confusion matrix of the training data, which compares the "Predicted" means of transport calculated by our model with the "Actual" from Posmo.](Bilder//Train_confmatrix.png)
 
 
 
 
-![Figure 6: The confusion matrix of the validation data, which compares the "Predicted" means of transport calculated by our model with the "Actual" from Posmo.](Bilder/Val_conf_matr.png)
+![Figure 6: The confusion matrix of the validation data, which compares the "Predicted" means of transport calculated by our model with the "Actual" from Posmo.](Bilder//Val_conf_matr.png)
 
 
 
