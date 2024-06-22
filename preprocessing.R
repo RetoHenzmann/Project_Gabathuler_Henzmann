@@ -11,7 +11,7 @@ library("caret")
 library("reshape2")
 
 #Import training dataset
-data <- read_delim("Posmo_Movement_data.csv")
+data <- read_delim("Posmo_Training_cor.csv")
 #Data filter, only time and coordinates, travel mode
 data <- data %>%
   select(-user_id, -weekday, -place_name)
@@ -173,7 +173,7 @@ ggplot(plot_data,aes(transport_mode, value, fill = transport_mode)) +
   geom_boxplot(outlier.shape = FALSE) +
   facet_wrap(~name, scales = "free_y")
 #Save boxplot
-ggsave("transport_mode_boxplot.png", plot = p, width = 10, height = 6)
+#ggsave("transport_mode_boxplot.png", plot = p, width = 10, height = 6)
 
 ##Link to Geoinformation
 #Linking / joint the geodata to the movment data:nearest route
@@ -483,7 +483,7 @@ ggplot(data = conf_matrix_melt, aes(x = Reference, y = Prediction, fill = ifelse
   scale_fill_gradient(low = "white", high = "blue", na.value = "grey90") +
   geom_text(aes(label = sprintf("%d", value)), vjust = 1) +
   theme_minimal() +
-  labs(title = "Confusion Matrix Traingsdata", x = "Actual", y = "Predicted") +
+  labs(x = "Actual", y = "Predicted") +
   guides(fill = guide_legend(title = "Count"))
 
 ####Validation data
@@ -519,7 +519,7 @@ ggplot(data = conf_matrix_val_melt, aes(x = Reference, y = Prediction, fill = if
   scale_fill_gradient(low = "white", high = "blue", na.value = "grey90") +
   geom_text(aes(label = sprintf("%d", value)), vjust = 1) +
   theme_minimal() +
-  labs(title = "Confusion Matrix Validationdata", x = "Actual", y = "Predicted") +
+  labs(x = "Actual", y = "Predicted") +
   guides(fill = guide_legend(title = "Count")) 
 
 
