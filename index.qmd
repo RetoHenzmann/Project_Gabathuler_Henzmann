@@ -1,6 +1,6 @@
 ---
-title: "GPS-based traffic mode detection : Implementation and validation"
-subtitle: "Analyzing Transport Modes through GPS Data and Road Maps : A Comparative Study with Posmo"
+title: "GPS-based traffic mode detection: Implementation and validation"
+subtitle: "Analyzing Transport Modes through GPS-Data and Road Maps: A Comparative Study with Posmo"
 author: Reto Henzmann and Gabathuler Oswald
 format:
   html:
